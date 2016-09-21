@@ -1,0 +1,89 @@
+{
+  "id": "AuditTracking",
+  "description": "Auditing Service",
+  "service": {
+    "readOnly": true,
+    "routerBase": "/auditing",
+    "roles": [
+      "GRAVITON_USER"
+    ],
+    "fixtures": []
+  },
+  "target": {
+    "indexes": [
+      "thread",
+      "createdAt"
+    ],
+    "relations": [],
+    "fields": [
+      {
+        "name": "id",
+        "type": "varchar",
+        "description": "Unique identifier"
+      },
+      {
+        "name": "thread",
+        "type": "varchar",
+        "title": "thread id",
+        "description": "thread id unique for each request",
+        "required": true
+      },
+      {
+        "name": "username",
+        "type": "varchar",
+        "title": "username id",
+        "description": "username for current user",
+        "required": true
+      },
+      {
+        "name": "action",
+        "type": "varchar",
+        "title": "action",
+        "description": "action that happened, update, insert, exception or requests",
+        "required": true
+      },
+      {
+        "name": "type",
+        "type": "varchar",
+        "title": "type",
+        "description": "What did happen, a collection update or request, response, exception",
+        "required": true
+      },
+      {
+        "name": "location",
+        "type": "varchar",
+        "title": "location",
+        "description": "Where did it happen",
+        "required": true
+      },
+      {
+        "name": "collectionId",
+        "type": "varchar",
+        "title": "collectionId",
+        "description": "collection Id identifier",
+        "required": true
+      },
+      {
+        "name": "collectionName",
+        "type": "varchar",
+        "title": "collection name",
+        "description": "collection Name of modified object class",
+        "required": true
+      },
+      {
+        "name": "data",
+        "type": "object",
+        "title": "data",
+        "description": "Additional data information",
+        "required": true
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "title": "Created At",
+        "description": "When did action take place",
+        "required": true
+      }
+    ]
+  }
+}
