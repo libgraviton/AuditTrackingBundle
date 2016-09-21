@@ -1,0 +1,17 @@
+{
+  "name": "graviton/graviton-service-bundle-audit-tracking",
+  "license": "GPL",
+  "type": "project",
+  "description": "Audit tracking bundle to be used in graviton/graviton",
+  "authors": [
+    {
+      "name": "List of contributors",
+      "homepage": "https://github.com/libgraviton/graviton/graphs/contributors"
+    }
+  ],
+  "keywords": ["log","logging","auditing"],
+  "homepage": "https://github.com/libgraviton",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "non-feature-branches": ["master", "develop", "support/*"]
+}
