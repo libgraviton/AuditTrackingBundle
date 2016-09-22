@@ -34,10 +34,8 @@ class GravitonAuditTrackingExtension extends Extension
         // Some configurations are turned on so tests are run with Tests user.
         if ($environment == 'prod') {
             $loader->load('prod/parameters.yml');
-            $loader->load('prod/config.yml');
         } else {
             $loader->load('test/parameters.yml');
-            $loader->load('test/config.yml');
         }
     }
 }
