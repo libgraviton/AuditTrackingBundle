@@ -10,8 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "graviton/graviton": "dev-feature/EVO-7278-security-and-despacher"
+        "php": ">=5.6"
     },
     "autoload": {
         "psr-0": { "Graviton": "src/"}
