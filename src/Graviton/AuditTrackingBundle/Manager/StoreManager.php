@@ -87,7 +87,7 @@ class StoreManager
             }
         }
 
-        $thread = $this->securityUtils->getThreadId();
+        $thread = $this->securityUtils->getRequestId();
         $response = $event->getResponse();
         
         // If request is valid we save it or we do not depending on the exceptions exclude policy
