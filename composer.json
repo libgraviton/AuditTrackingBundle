@@ -23,12 +23,14 @@
     },
     "scripts": {
         "check": [
-            "vendor/bin/graviton-validate-directory --path .",
-            "./vendor/bin/phpcs --config-set installed_paths ../../libgraviton/codesniffer/CodeSniffer/Standards",
-            "./vendor/bin/phpcs --standard=PSR1 src/",
-            "./vendor/bin/phpcs --standard=PSR2 src/",
-            "./vendor/bin/phpcs --standard=ENTB src/"
+            "./vendor/bin/phpcs --config-set installed_paths vendor/libgraviton/codesniffer/CodeSniffer/Standards",
+            "./vendor/bin/phpcs --standard=PSR1 --ignore='*.css' --ignore='*.js' src/",
+            "./vendor/bin/phpcs --standard=PSR2 --ignore='*.css' --ignore='*.js' src/",
+            "./vendor/bin/phpcs --standard=ENTB --ignore='*.css' --ignore='*.js' src/"
         ]
+    },
+    "installer-paths": {
+        "vendor/composer_phpcs": ["libgraviton/codesniffer"]
     },
     "minimum-stability": "dev",
     "prefer-stable": true
