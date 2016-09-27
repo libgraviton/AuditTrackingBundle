@@ -23,19 +23,6 @@ matrix:
   - php: 5.6
     env: COMPOSER_CHECK=true PHPUNIT=false
 script:
-- >
-    if [ "$PHPUNIT" = "true" ]; then
-        touch vendor/graviton/graviton/src/Graviton/I18nBundle/Resources/translations/i18n.de.odm && \
-        touch vendor/graviton/graviton/src/Graviton/I18nBundle/Resources/translations/i18n.en.odm && \
-        if [ "$PHPUNIT_SUITE" == "unit" ]; then
-          COVERAGE=" --coverage-clover=coverage.clover "
-        fi && \
-        vendor/bin/phpunit $COVERAGE --testsuite=$PHPUNIT_SUITE && \
-        if [ $COVERAGE ]; then
-          php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
-        fi
-    fi
-- >
     if [ "$COMPOSER_CHECK" = "true" ]; then
         composer check;
     fi
