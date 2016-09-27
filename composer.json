@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=5.6"
+        "php": ">=5.6",
+        "graviton/graviton": ">=0.77.0"
     },
     "autoload": {
         "psr-0": { "Graviton": "src/"}

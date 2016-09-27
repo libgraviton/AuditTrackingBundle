@@ -2,14 +2,16 @@
 
 ## Inner Auditing tool bundle
 This tool is meant to run as a hidden service in order to know what each user request or modifies.
-It will not limit nor interfere with the users request but only store the changes and data recived.
+It will not limit nor interfere with the users request but only store the changes and data received.
+* x-header-audit-thread → id-string-uuid
+* Api to list thread: /auditing/?eq(thread,string:id-string-uuid)`
 
 ### version
-* 0.0.1-BETA: 2016/09/19 Basic auditing enabled by default. Testing fase start.
+* `v0.0.1`: 2016/09/22 First version with basic auditing enabled by default, collection changes.
 
 #### Configuration
-
-In the folder `AuditTracking/Resources/config/` you can find a file called `parameters.yml` where you can turn on or off logs.
+* Need Graviton ^v0.77.0, so ModelEvent is fired on Document Updates.
+* Setup configuration in `AuditTracking/Resources/config/parameters.yml`.
 
 ```yml
 parameters:
@@ -17,7 +19,7 @@ parameters:
         # General on/off switch
         log_enabled: true
         # Localhost and not Real User on/off switch
-        log_test_calls: true
+        log_test_calls: false
         # Store request log also on 400 error
         log_on_failure: false
         # Request methods to be saved, array PUT,POST,DELETE,PATCH...
@@ -38,6 +40,14 @@ parameters:
         exceptions: false
         # Exclude header status exceptions code, 400=bad request, form validation
         exceptions_exclude: [400]
-        # Exlucde listed URLS, array
-        exlude_urls: ["/auditing"]
 ```
+
+### Testing in Graviton
+* composer require graviton/graviton-service-bundle-audit-tracking
+* Inside graviton load the bundle: GravitonBundleBundle:getBundles - add the load of this new bundle
+* Enable in config the log_test_calls: true  ( also, so you use the bundle in dev mode )
+
+### Enabling in a Wrapper
+* Enable in resources/configuration.sh the new bundle: `\\Graviton\\AuditTrackingBundle\\GravitonAuditTrackingBundle`
+* composer require graviton/graviton-service-bundle-audit-tracking
+* sh dev-cleanstart.sh
