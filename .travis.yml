@@ -6,6 +6,7 @@ before_script:
     if [ "$PHPUNIT_SUITE" != "unit" ]; then
         phpenv config-rm xdebug.ini
     fi
+- echo "memory_limit=2G"  >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
 - composer install --no-interaction  --ignore-platform-reqs --no-scripts --profile
 - >
     if [ "$PHPUNIT" = "true" ]; then
