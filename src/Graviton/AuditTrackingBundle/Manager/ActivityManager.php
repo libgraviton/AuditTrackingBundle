@@ -125,12 +125,6 @@ class ActivityManager
             }
         }
 
-        // Check if we wanna log test and localhost calls
-        if (!$this->getConfigValue('log_test_calls', 'bool')
-            && !in_array($this->request->getHost(), ['localhost', '127.0.0.1'])) {
-            return false;
-        }
-
         return true;
     }
 
