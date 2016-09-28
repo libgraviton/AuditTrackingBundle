@@ -10,7 +10,7 @@ It will not limit nor interfere with the users request but only store the change
 * `v0.0.1`: 2016/09/22 First version with basic auditing enabled by default, collection changes.
 
 #### Configuration
-* Need Graviton ^v0.77.0, so ModelEvent is fired on Document Updates.
+* Need Graviton ^v0.76.0, so ModelEvent is fired on Document Updates.
 * Setup configuration in `AuditTracking/Resources/config/parameters.yml`.
 
 ```yml
