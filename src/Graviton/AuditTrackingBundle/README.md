@@ -7,10 +7,10 @@ It will not limit nor interfere with the users request but only store the change
 * Api to list thread: /auditing/?eq(thread,string:id-string-uuid)`
 
 ### version
-* `v0.1.0`: 2016/09/28 First version with basic auditing enabled by default, collection changes.
+* `v0.0.1`: 2016/09/22 First version with basic auditing enabled by default, collection changes.
 
 #### Configuration
-* Need Graviton ^v0.77.0, so ModelEvent is fired on Document Updates.
+* Need Graviton ^v0.76.0, so ModelEvent is fired on Document Updates.
 * Setup configuration in `AuditTracking/Resources/config/parameters.yml`.
 
 ```yml
@@ -40,8 +40,6 @@ parameters:
         exceptions: false
         # Exclude header status exceptions code, 400=bad request, form validation
         exceptions_exclude: [400]
-        # Exclude listed URLS, array
-        exlude_urls: ["/auditing"]
 ```
 
 ### Testing in Graviton
