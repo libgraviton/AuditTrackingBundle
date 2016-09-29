@@ -115,7 +115,7 @@ class ActivityManager
         }
         
         // We never log tracking service calls
-        $excludeUrls = $this->getConfigValue('exlude_urls', 'array');
+        $excludeUrls = $this->getConfigValue('exclude_urls', 'array');
         if ($excludeUrls) {
             $currentUrl = $this->request->getRequestUri();
             foreach ($excludeUrls as $url) {
@@ -123,12 +123,6 @@ class ActivityManager
                     return false;
                 }
             }
-        }
-
-        // Check if we wanna log test and localhost calls
-        if (!$this->getConfigValue('log_test_calls', 'bool')
-            && !in_array($this->request->getHost(), ['localhost', '127.0.0.1'])) {
-            return false;
         }
 
         return true;

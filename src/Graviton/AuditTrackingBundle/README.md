@@ -2,12 +2,14 @@
 
 ## Inner Auditing tool bundle
 This tool is meant to run as a hidden service in order to know what each user request or modifies.
-It will not limit nor interfere with the users request but only store the changes and data received.
-* x-header-audit-thread → id-string-uuid
-* Api to list thread: /auditing/?eq(thread,string:id-string-uuid)`
+It will not limit nor interfere with the user request but only store the changes and data received
+if so is configure`.
+* `x-header-audit-thread` → id-string-uuid
+* Api to list thread: `/auditing/?eq(thread,string:id-string-uuid)`
 
 ### version
-* `v0.0.1`: 2016/09/22 First version with basic auditing enabled by default, collection changes.
+* `v0.1.1`: 2016/09/29 Remove localhost check and fix some typos.
+* `v0.1.0`: 2016/09/28 First version with basic auditing enabled by default, collection changes.
 
 #### Configuration
 * Need Graviton ^v0.76.0, so ModelEvent is fired on Document Updates.
@@ -19,7 +21,7 @@ parameters:
         # General on/off switch
         log_enabled: true
         # Localhost and not Real User on/off switch
-        log_test_calls: false
+        log_test_calls: false`
         # Store request log also on 400 error
         log_on_failure: false
         # Request methods to be saved, array PUT,POST,DELETE,PATCH...
@@ -40,6 +42,8 @@ parameters:
         exceptions: false
         # Exclude header status exceptions code, 400=bad request, form validation
         exceptions_exclude: [400]
+        # Exlucde listed URLS, array
+        exclude_urls: ["/auditing"]
 ```
 
 ### Testing in Graviton
