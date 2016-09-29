@@ -40,6 +40,8 @@ parameters:
         exceptions: false
         # Exclude header status exceptions code, 400=bad request, form validation
         exceptions_exclude: [400]
+        # Exlucde listed URLS, array
+        exclude_urls: ["/auditing"]
 ```
 
 ### Testing in Graviton

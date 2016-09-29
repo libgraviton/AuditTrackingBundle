@@ -115,7 +115,7 @@ class ActivityManager
         }
         
         // We never log tracking service calls
-        $excludeUrls = $this->getConfigValue('exlude_urls', 'array');
+        $excludeUrls = $this->getConfigValue('exclude_urls', 'array');
         if ($excludeUrls) {
             $currentUrl = $this->request->getRequestUri();
             foreach ($excludeUrls as $url) {
