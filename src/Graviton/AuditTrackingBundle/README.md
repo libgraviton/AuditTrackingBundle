@@ -8,7 +8,8 @@ if so is configure`.
 * Api to list thread: `/auditing/?eq(thread,string:id-string-uuid)`
 
 ### version
-* `v0.0.1`: 2016/09/22 First version with basic auditing enabled by default, collection changes.
+* `v0.1.1`: 2016/09/29 Remove localhost check and fix some typos.
+* `v0.1.0`: 2016/09/28 First version with basic auditing enabled by default, collection changes.
 
 #### Configuration
 * Need Graviton ^v0.76.0, so ModelEvent is fired on Document Updates.
