@@ -2,7 +2,6 @@ services:
     graviton.audit.controller.default:
         class: Graviton\AuditTrackingBundle\Controller\DefaultController
         parent: graviton.rest.controller
-        scope: request
         tags:
             - { name: graviton.rest, collection: AuditTracking, read-only: true, router-base: /auditing }
         calls:
