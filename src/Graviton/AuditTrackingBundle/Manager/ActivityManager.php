@@ -33,6 +33,9 @@ class ActivityManager
     /** @var Request $request */
     private $request;
 
+    /** @var RequestStack $request */
+    private $requestStack;
+
     /** @var array */
     private $configurations;
 
@@ -55,6 +58,7 @@ class ActivityManager
         RequestStack  $requestStack,
         AuditTracking $document
     ) {
+        $this->requestStack = $requestStack;
         $this->request = $requestStack ? $requestStack->getCurrentRequest() : false;
         $this->document = $document;
     }
@@ -113,7 +117,7 @@ class ActivityManager
         if (!$this->getConfigValue('log_enabled', 'bool')) {
             return false;
         }
-        
+
         // We never log tracking service calls
         $excludeUrls = $this->getConfigValue('exclude_urls', 'array');
         if ($excludeUrls) {
@@ -198,15 +202,14 @@ class ActivityManager
             $data['header']  = $response->headers->all();
         }
 
-        // Header links
-        $location = $this->extractHeaderLink($response->headers->get('link'), 'self');
+        $request = $this->requestStack->getCurrentRequest();
 
         /** @var AuditTracking $audit */
         $audit = new $this->document();
         $audit->setAction('response');
         $audit->setType($statusCode);
         $audit->setData((object) $data);
-        $audit->setLocation($location);
+        $audit->setLocation($request->attributes->get('selfLink'));
         $audit->setCreatedAt(new \DateTime());
         $this->events[] = $audit;
     }
@@ -275,34 +278,6 @@ class ActivityManager
         $audit->setCreatedAt(new \DateTime());
 
         $this->events[] = $audit;
-    }
-
-    /**
-     * Parse and extract customer header links
-     *
-     * @param string $strHeaderLink sf header links
-     * @param string $extract       desired key to be found
-     * @return string
-     */
-    private function extractHeaderLink($strHeaderLink, $extract = 'self')
-    {
-        if (!$strHeaderLink) {
-            return '';
-        }
-
-        preg_match_all('/<(.*?)>; rel="([^"]+)"/i', $strHeaderLink, $matches);
-
-        if (empty($matches) || !array_key_exists(2, $matches)) {
-            return '';
-        }
-
-        foreach ($matches[1] as $key => $url) {
-            if ($extract == $matches[2][$key]) {
-                return $url;
-            }
-        }
-
-        return'';
     }
 
     /**

@@ -121,7 +121,7 @@ class StoreManager
         // Set Audit header information
         if ($saved) {
             $url = $this->router->generate('graviton.audit.rest.default.all', [], UrlGeneratorInterface::ABSOLUTE_URL);
-            $url .= sprintf('?eq(thread,string:%s)', $thread);
+            $url .= sprintf('?eq(thread,string:%s)&sort(-createdAt)', $thread);
             $linkHeader = LinkHeader::fromResponse($response);
             // append rel=self link to link headers
             $linkHeader->add(new LinkHeaderItem($url, array('rel' => self::AUDIT_HEADER_LINK)));

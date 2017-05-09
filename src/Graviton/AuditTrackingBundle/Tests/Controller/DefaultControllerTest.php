@@ -76,10 +76,7 @@ class DefaultControllerTest extends RestTestCase
 
         // Lets check if the Audit Event was there and in header
         $links = $response->headers->get('link');
-        // extractHeaderLink
-        $manager = $this->getContainer()->get('graviton.audit.manager.activity');
-        $extractHeaderLink = $this->getPrivateClassMethod(get_class($manager), 'extractHeaderLink');
-        $headerLink = $extractHeaderLink->invokeArgs($manager, [$links, StoreManager::AUDIT_HEADER_LINK]);
+        $headerLink = $this->extractHeaderLink($links, StoreManager::AUDIT_HEADER_LINK);
 
         $this->assertNotEmpty($headerLink, 'The expected audit header was not set as expected');
 
@@ -126,12 +123,8 @@ class DefaultControllerTest extends RestTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         // Lets check if the Audit Event was there and in header
-        // Lets check if the Audit Event was there and in header
         $links = $response->headers->get('link');
-        // extractHeaderLink
-        $manager = $this->getContainer()->get('graviton.audit.manager.activity');
-        $extractHeaderLink = $this->getPrivateClassMethod(get_class($manager), 'extractHeaderLink');
-        $headerLink = $extractHeaderLink->invokeArgs($manager, [$links, StoreManager::AUDIT_HEADER_LINK]);
+        $headerLink = $this->extractHeaderLink($links, StoreManager::AUDIT_HEADER_LINK);
 
         // Get the data and hcek for a inserted new event
         $client = static::createRestClient();
@@ -145,5 +138,35 @@ class DefaultControllerTest extends RestTestCase
         $this->assertEquals('collection', $event->{'type'});
         $this->assertEquals('App', $event->{'collectionName'});
         $this->assertEquals(self::TEST_APP_ID, $event->{'collectionId'});
+    }
+
+
+
+    /**
+     * Parse and extract customer header links
+     *
+     * @param string $strHeaderLink sf header links
+     * @param string $extract       desired key to be found
+     * @return string
+     */
+    private function extractHeaderLink($strHeaderLink, $extract = 'self')
+    {
+        if (!$strHeaderLink) {
+            return '';
+        }
+
+        preg_match_all('/<(.*?)>; rel="([^"]+)"/i', $strHeaderLink, $matches);
+
+        if (empty($matches) || !array_key_exists(2, $matches)) {
+            return '';
+        }
+
+        foreach ($matches[1] as $key => $url) {
+            if ($extract == $matches[2][$key]) {
+                return $url;
+            }
+        }
+
+        return'';
     }
 }
