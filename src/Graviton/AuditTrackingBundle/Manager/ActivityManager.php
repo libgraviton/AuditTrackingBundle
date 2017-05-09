@@ -290,15 +290,19 @@ class ActivityManager
             return '';
         }
 
-        $parts = [];
-        foreach (explode(',', $strHeaderLink) as $link) {
-            $link = explode(';', $link);
-            if (count($link)==2) {
-                $parts[str_replace(['rel=','"'], '', trim($link[1]))] =  str_replace(['<','>'], '', $link[0]);
+        preg_match_all('/<(.*?)>; rel="([^"]+)"/i', $strHeaderLink, $matches);
+
+        if (empty($matches) || !array_key_exists(2, $matches)) {
+            return '';
+        }
+
+        foreach ($matches[1] as $key => $url) {
+            if ($extract == $matches[2][$key]) {
+                return $url;
             }
         }
 
-        return  array_key_exists($extract, $parts) ? $parts[$extract] : '';
+        return'';
     }
 
     /**
