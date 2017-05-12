@@ -21,7 +21,7 @@ class DefaultControllerTest extends RestTestCase
 {
     /** Name to be used in test */
     const TEST_APP_ID = 'audit-id';
-    
+
     /** @var  DocumentManager */
     private $documentManager;
 
@@ -59,7 +59,7 @@ class DefaultControllerTest extends RestTestCase
         $new->name->de = 'audit de language name';
         return $new;
     }
-    
+
     /**
      * Insert a new APP element
      *
@@ -73,14 +73,16 @@ class DefaultControllerTest extends RestTestCase
         $client->put('/core/app/'.self::TEST_APP_ID, $new);
         $response = $client->getResponse();
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-        
+
         // Lets check if the Audit Event was there and in header
-        $header = $response->headers->get(StoreManager::AUDIT_HEADER_KEY);
-        $this->assertNotEmpty($header, 'The expected audit header was not set as expected');
+        $links = $response->headers->get('link');
+        $headerLink = $this->extractHeaderLink($links, StoreManager::AUDIT_HEADER_LINK);
+
+        $this->assertNotEmpty($headerLink, 'The expected audit header was not set as expected');
 
         // Get the data and hcek for a inserted new event
         $client = static::createRestClient();
-        $client->request('GET', '/auditing/?eq(thread,string:'.$header.')');
+        $client->request('GET', $headerLink);
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $results = $client->getResults();
 
@@ -121,12 +123,12 @@ class DefaultControllerTest extends RestTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         // Lets check if the Audit Event was there and in header
-        $header = $response->headers->get(StoreManager::AUDIT_HEADER_KEY);
-        $this->assertNotEmpty($header, 'The expected audit header was not set as expected');
+        $links = $response->headers->get('link');
+        $headerLink = $this->extractHeaderLink($links, StoreManager::AUDIT_HEADER_LINK);
 
         // Get the data and hcek for a inserted new event
         $client = static::createRestClient();
-        $client->request('GET', '/auditing/?eq(thread,string:'.$header.')');
+        $client->request('GET', $headerLink);
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $results = $client->getResults();
 
@@ -136,5 +138,35 @@ class DefaultControllerTest extends RestTestCase
         $this->assertEquals('collection', $event->{'type'});
         $this->assertEquals('App', $event->{'collectionName'});
         $this->assertEquals(self::TEST_APP_ID, $event->{'collectionId'});
+    }
+
+
+
+    /**
+     * Parse and extract customer header links
+     *
+     * @param string $strHeaderLink sf header links
+     * @param string $extract       desired key to be found
+     * @return string
+     */
+    private function extractHeaderLink($strHeaderLink, $extract = 'self')
+    {
+        if (!$strHeaderLink) {
+            return '';
+        }
+
+        preg_match_all('/<(.*?)>; rel="([^"]+)"/i', $strHeaderLink, $matches);
+
+        if (empty($matches) || !array_key_exists(2, $matches)) {
+            return '';
+        }
+
+        foreach ($matches[1] as $key => $url) {
+            if ($extract == $matches[2][$key]) {
+                return $url;
+            }
+        }
+
+        return'';
     }
 }

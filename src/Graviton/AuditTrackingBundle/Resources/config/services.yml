@@ -39,6 +39,7 @@ services:
             logger: '@monolog.logger'
             doctrine: '@doctrine_mongodb'
             securityUtils: '@graviton.security.service.utils'
+            router: "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: persistEvents, priority: -2 }
 
