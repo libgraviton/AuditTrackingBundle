@@ -10,8 +10,11 @@ use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Graviton\SecurityBundle\Entities\SecurityUser;
 use Graviton\SecurityBundle\Service\SecurityUtils;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Bridge\Monolog\Logger;
+use Graviton\RestBundle\HttpFoundation\LinkHeader;
+use Graviton\RestBundle\HttpFoundation\LinkHeaderItem;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Router;
 
 /**
  * Class StoreManager
@@ -23,7 +26,7 @@ use Symfony\Bridge\Monolog\Logger;
  */
 class StoreManager
 {
-    const AUDIT_HEADER_KEY = 'x-header-audit-thread';
+    const AUDIT_HEADER_LINK = 'audit';
 
     /** @var ActivityManager */
     private $activityManager;
@@ -37,23 +40,29 @@ class StoreManager
     /** @var SecurityUtils */
     private $securityUtils;
 
+    /** @var Router */
+    private $router;
+
     /**
      * StoreManager constructor.
      * @param ActivityManager $activityManager Main activity manager
      * @param Logger          $logger          Monolog log service
      * @param ManagerRegistry $doctrine        Doctrine document mapper
      * @param SecurityUtils   $securityUtils   Sf Auth token storage
+     * @param Router          $router          Sf Router component
      */
     public function __construct(
         ActivityManager $activityManager,
         Logger $logger,
         ManagerRegistry $doctrine,
-        SecurityUtils $securityUtils
+        SecurityUtils $securityUtils,
+        Router $router
     ) {
         $this->activityManager = $activityManager;
         $this->logger = $logger;
         $this->documentManager = $doctrine->getManager();
         $this->securityUtils = $securityUtils;
+        $this->router = $router;
     }
 
     /**
@@ -111,7 +120,13 @@ class StoreManager
 
         // Set Audit header information
         if ($saved) {
-            $response->headers->set(self::AUDIT_HEADER_KEY, $thread);
+            $url = $this->router->generate('graviton.audit.rest.default.all', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $url .= sprintf('?eq(thread,string:%s)&sort(-createdAt)', $thread);
+            $linkHeader = LinkHeader::fromResponse($response);
+            // append rel=self link to link headers
+            $linkHeader->add(new LinkHeaderItem($url, array('rel' => self::AUDIT_HEADER_LINK)));
+            // overwrite link headers with new headers
+            $response->headers->set('Link', (string) $linkHeader);
         }
     }
 
