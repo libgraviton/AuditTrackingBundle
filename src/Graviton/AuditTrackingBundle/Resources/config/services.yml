@@ -26,8 +26,8 @@ services:
     graviton.audit.manager.activity:
         class: Graviton\AuditTrackingBundle\Manager\ActivityManager
         arguments:
-            requestStack: '@request_stack'
-            document: '@graviton.audit.document.audittracking'
+            - '@request_stack'
+            - '@graviton.audit.document.audittracking'
         calls:
             - [setConfiguration, ["%graviton_audit_tracking%"]]
 
@@ -35,11 +35,11 @@ services:
     graviton.audit.store.activity:
         class: Graviton\AuditTrackingBundle\Manager\StoreManager
         arguments:
-            activityManager: '@graviton.audit.manager.activity'
-            logger: '@monolog.logger'
-            doctrine: '@doctrine_mongodb'
-            securityUtils: '@graviton.security.service.utils'
-            router: "@router"
+            - '@graviton.audit.manager.activity'
+            - '@monolog.logger'
+            - '@doctrine_mongodb'
+            - '@graviton.security.service.utils'
+            - "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: persistEvents, priority: -2 }
 
@@ -47,14 +47,14 @@ services:
     graviton.audit.listener.request:
         class: Graviton\AuditTrackingBundle\Listener\RequestActivityListener
         arguments:
-            activityManager: '@graviton.audit.manager.activity'
+            - '@graviton.audit.manager.activity'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 201 }
 
     graviton.audit.listener.db:
         class: Graviton\AuditTrackingBundle\Listener\DocumentModelListener
         arguments:
-            activityManager: '@graviton.audit.manager.activity'
+            - '@graviton.audit.manager.activity'
         tags:
             - { name: kernel.event_listener, event: document.model.event.insert, method: modelInsert }
             - { name: kernel.event_listener, event: document.model.event.update, method: modelUpdate }
@@ -63,13 +63,13 @@ services:
     graviton.audit.listener.response:
         class: Graviton\AuditTrackingBundle\Listener\ResponseActivityListener
         arguments:
-            activityManager: '@graviton.audit.manager.activity'
+            - '@graviton.audit.manager.activity'
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: -1 }
 
     graviton.audit.listener.exception:
         class: Graviton\AuditTrackingBundle\Listener\ExceptionActivityListener
         arguments:
-            activityManager: '@graviton.audit.manager.activity'
+            - '@graviton.audit.manager.activity'
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1 }
