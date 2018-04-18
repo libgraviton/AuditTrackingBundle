@@ -1,6 +1,6 @@
 {
     "name": "graviton/graviton-service-bundle-audit-tracking",
-    "license": "GPL",
+    "license": "MIT",
     "type": "project",
     "description": "Audit tracking bundle to be used in graviton/graviton",
     "authors": [
@@ -32,6 +32,5 @@
     "installer-paths": {
         "vendor/composer_phpcs": ["libgraviton/codesniffer"]
     },
-    "minimum-stability": "dev",
     "prefer-stable": true
 }

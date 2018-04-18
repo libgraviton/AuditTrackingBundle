@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Router;
  * @package Graviton\AuditTrackingBundle\Manager
  *
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
- * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @license  https://opensource.org/licenses/MIT MIT License
  * @link     http://swisscom.ch
  */
 class StoreManager
@@ -36,7 +36,7 @@ class StoreManager
 
     /** @var DocumentManager */
     private $documentManager;
-    
+
     /** @var SecurityUtils */
     private $securityUtils;
 
@@ -98,7 +98,7 @@ class StoreManager
 
         $thread = $this->securityUtils->getRequestId();
         $response = $event->getResponse();
-        
+
         // If request is valid we save it or we do not depending on the exceptions exclude policy
         if (!$this->activityManager->getConfigValue('log_on_failure', 'bool')) {
             $excludedStatus = $this->activityManager->getConfigValue('exceptions_exclude', 'array');
