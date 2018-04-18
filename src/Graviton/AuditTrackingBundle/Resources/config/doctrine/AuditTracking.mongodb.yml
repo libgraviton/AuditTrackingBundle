@@ -30,4 +30,5 @@ Graviton\AuditTrackingBundle\Document\AuditTracking:
           createdAt:
             order: asc
         options:
+          name: auditIdx
           background: true
