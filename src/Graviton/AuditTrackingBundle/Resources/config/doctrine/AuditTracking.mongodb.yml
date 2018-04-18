@@ -23,11 +23,9 @@ Graviton\AuditTrackingBundle\Document\AuditTracking:
   indexes:
       auditIdx:
         keys:
-          collectionName:
-            order: asc
-          collectionId:
-            order: asc
-          createdAt:
-            order: asc
+          collectionName: asc
+          collectionId: asc
+          createdAt: asc
         options:
+          name: auditIdx
           background: true
