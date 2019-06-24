@@ -11,10 +11,11 @@
     ],
     "require": {
         "php": ">=5.6",
-        "graviton/graviton": ">=0.77.0"
+        "graviton/graviton": ">=0.77.0",
+        "graviton/link-header-rel-parser": "~1"
     },
     "autoload": {
-        "psr-0": { "Graviton": "src/"}
+        "psr-4": { "Graviton\\AuditTrackingBundle\\": "src/"}
     },
     "require-dev": {
         "phpunit/phpunit": "@stable",
