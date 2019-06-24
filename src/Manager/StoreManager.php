@@ -7,12 +7,12 @@ namespace Graviton\AuditTrackingBundle\Manager;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Graviton\AuditTrackingBundle\Document\AuditTracking;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Graviton\LinkHeaderParser\LinkHeader;
+use Graviton\LinkHeaderParser\LinkHeaderItem;
 use Graviton\SecurityBundle\Entities\SecurityUser;
 use Graviton\SecurityBundle\Service\SecurityUtils;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Bridge\Monolog\Logger;
-use Graviton\RestBundle\HttpFoundation\LinkHeader;
-use Graviton\RestBundle\HttpFoundation\LinkHeaderItem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 
@@ -122,9 +122,11 @@ class StoreManager
         if ($saved) {
             $url = $this->router->generate('graviton.audit.rest.default.all', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $url .= sprintf('?eq(thread,string:%s)&sort(-createdAt)', $thread);
-            $linkHeader = LinkHeader::fromResponse($response);
-            // append rel=self link to link headers
-            $linkHeader->add(new LinkHeaderItem($url, array('rel' => self::AUDIT_HEADER_LINK)));
+
+            // append rel=self link to link header
+            $linkHeader = LinkHeader::fromString($response->headers->get('Link', null));
+            $linkHeader->add(new LinkHeaderItem($url, self::AUDIT_HEADER_LINK));
+
             // overwrite link headers with new headers
             $response->headers->set('Link', (string) $linkHeader);
         }

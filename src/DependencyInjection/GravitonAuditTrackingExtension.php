@@ -23,6 +23,6 @@ class GravitonAuditTrackingExtension extends GravitonBundleExtension
      */
     public function getConfigDir()
     {
-        return __DIR__.'/../Resources/config';
+        return __DIR__ . '/../Resources/config';
     }
 }
