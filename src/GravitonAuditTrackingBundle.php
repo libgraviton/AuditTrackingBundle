@@ -24,6 +24,6 @@ class GravitonAuditTrackingBundle extends Bundle implements GravitonBundleInterf
      */
     public function getBundles()
     {
-        return array();
+        return [];
     }
 }
