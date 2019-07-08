@@ -11,8 +11,10 @@ use Graviton\LinkHeaderParser\LinkHeader;
 use Graviton\LinkHeaderParser\LinkHeaderItem;
 use Graviton\SecurityBundle\Entities\SecurityUser;
 use Graviton\SecurityBundle\Service\SecurityUtils;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
 
@@ -27,6 +29,9 @@ use Symfony\Component\Routing\Router;
 class StoreManager
 {
     const AUDIT_HEADER_LINK = 'audit';
+
+    /** @var RequestStack */
+    private $requestStack;
 
     /** @var ActivityManager */
     private $activityManager;
@@ -45,6 +50,7 @@ class StoreManager
 
     /**
      * StoreManager constructor.
+     * @param RequestStack    $requestStack    request stack
      * @param ActivityManager $activityManager Main activity manager
      * @param Logger          $logger          Monolog log service
      * @param ManagerRegistry $doctrine        Doctrine document mapper
@@ -52,12 +58,14 @@ class StoreManager
      * @param Router          $router          Sf Router component
      */
     public function __construct(
+        RequestStack $requestStack,
         ActivityManager $activityManager,
         Logger $logger,
         ManagerRegistry $doctrine,
         SecurityUtils $securityUtils,
         Router $router
     ) {
+        $this->requestStack = $requestStack;
         $this->activityManager = $activityManager;
         $this->logger = $logger;
         $this->documentManager = $doctrine->getManager();
@@ -69,11 +77,11 @@ class StoreManager
      * Save data to DB
      * onKernelResponse
      *
-     * @param FilterResponseEvent $event Sf fired kernel event
+     * @param ResponseEvent $event event
      *
      * @return void
      */
-    public function persistEvents(FilterResponseEvent $event)
+    public function persistEvents(ResponseEvent $event)
     {
         // No events or no user.
         if (!($events = $this->activityManager->getEvents())) {
@@ -96,7 +104,11 @@ class StoreManager
             }
         }
 
-        $thread = $this->securityUtils->getRequestId();
+        $thread = '?????';
+        if ($this->requestStack->getCurrentRequest() instanceof Request) {
+            $thread = $this->requestStack->getCurrentRequest()->attributes->get('requestId', $thread);
+        }
+
         $response = $event->getResponse();
 
         // If request is valid we save it or we do not depending on the exceptions exclude policy
