@@ -10,8 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "graviton/graviton": ">=3.0.0",
+        "graviton/graviton": ">=4.0.0",
         "graviton/link-header-rel-parser": "~1"
     },
     "autoload": {
