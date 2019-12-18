@@ -5,7 +5,7 @@
 namespace Graviton\AuditTrackingBundle\Listener;
 
 use Graviton\AuditTrackingBundle\Manager\ActivityManager;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
  * Class ResponseActivityListener
@@ -32,10 +32,10 @@ class ResponseActivityListener
     /**
      * When response is prepared and ready to be sent.
      *
-     * @param FilterResponseEvent $event Sf kernel response event
+     * @param ResponseEvent $event Sf kernel response event
      * @return void
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $this->manager->registerResponseEvent($event->getResponse());
     }

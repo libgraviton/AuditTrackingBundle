@@ -5,8 +5,7 @@
 namespace Graviton\AuditTrackingBundle\Listener;
 
 use Graviton\AuditTrackingBundle\Manager\ActivityManager;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
  * Class ExceptionActivityListener
@@ -33,13 +32,13 @@ class ExceptionActivityListener
     /**
      * Should not handle Validation Exceptions and only service exceptions
      *
-     * @param GetResponseForExceptionEvent $event Sf Event
+     * @param ExceptionEvent $event Sf Event
      *
      * @return void
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $this->manager->registerExceptionEvent($exception);
     }
 }
