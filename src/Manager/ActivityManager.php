@@ -217,10 +217,10 @@ class ActivityManager
     /**
      * Capture possible un-handled exceptions in php
      *
-     * @param \Exception $exception The exception thrown in service.
+     * @param \Throwable $exception The exception thrown in service.
      * @return void
      */
-    public function registerExceptionEvent(\Exception $exception)
+    public function registerExceptionEvent(\Throwable $exception)
     {
         if (!$this->enabled) {
             return;
