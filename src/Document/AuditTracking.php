@@ -7,60 +7,85 @@ namespace Graviton\AuditTrackingBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  https://opensource.org/licenses/MIT MIT License
  * @link     http://swisscom.ch
+ *
+ * @ODM\Document(collection="App")
+ * @ODM\InheritanceType("COLLECTION_PER_CLASS")
  */
 class AuditTracking
 {
     /**
      * @var mixed $id
+     *
+     * @ODM\Id(type="string", strategy="CUSTOM", options={"class"="Graviton\DocumentBundle\Doctrine\IdGenerator"})
      */
     protected $id;
 
     /**
      * @var string $thread
+     *
+     * @ODM\Field(type="string")
      */
     protected $thread;
 
     /**
      * @var string $username
+     *
+     * @ODM\Field(type="string")
      */
     protected $username;
 
     /**
      * @var string $action
+     *
+     * @ODM\Field(type="string")
      */
     protected $action;
 
     /**
      * @var string $type
+     *
+     * @ODM\Field(type="string")
      */
     protected $type;
 
     /**
      * @var string $location
+     *
+     * @ODM\Field(type="string")
      */
     protected $location;
 
     /**
      * @var ArrayCollection $data
+     *
+     * @ODM\Field(type="raw")
      */
     protected $data;
 
     /**
      * @var string $collectionName
+     *
+     * @ODM\Field(type="string")
      */
     protected $collectionId;
 
     /**
      * @var string $collectionName
+     *
+     * @ODM\Field(type="string")
      */
     protected $collectionName;
 
     /**
      * @var \datetime $createdAt
+     *
+     * @ODM\Field(type="date")
      */
     protected $createdAt;
 

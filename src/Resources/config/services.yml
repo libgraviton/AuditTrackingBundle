@@ -40,9 +40,9 @@ services:
         class: Graviton\AuditTrackingBundle\Document\AuditTracking
 
     graviton.audit.repository.audittracking:
-        class: Doctrine\ODM\MongoDB\DocumentRepository
+        class: Doctrine\ODM\MongoDB\Repository\DocumentRepository
         arguments: ["GravitonAuditTrackingBundle:AuditTracking"]
-        factory:   ['@doctrine.odm.mongodb.document_manager', getRepository]
+        factory:   ['@doctrine_mongodb.odm.default_document_manager', getRepository]
 
     graviton.audit.model.auditracking:
         class: Graviton\AuditTrackingBundle\Model\AuditTracking

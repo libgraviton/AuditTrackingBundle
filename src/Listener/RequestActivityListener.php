@@ -5,7 +5,7 @@
 namespace Graviton\AuditTrackingBundle\Listener;
 
 use Graviton\AuditTrackingBundle\Manager\ActivityManager;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * Class RequestActivityListener
@@ -32,10 +32,10 @@ class RequestActivityListener
     /**
      * When request is received from user.
      *
-     * @param GetResponseEvent $event Sf Event
+     * @param RequestEvent $event Sf Event
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if ($event->isMasterRequest()) {
             $this->manager->registerRequestEvent($event->getRequest());
