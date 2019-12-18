@@ -161,7 +161,7 @@ class StoreManager
 
         try {
             $this->documentManager->persist($event);
-            $this->documentManager->flush($event);
+            $this->documentManager->flush();
         } catch (\Exception $e) {
             $this->logger->error('AuditTracking:persist-error:'.$thread.':'.json_encode($event));
             $saved = false;
