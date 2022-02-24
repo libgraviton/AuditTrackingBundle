@@ -95,15 +95,6 @@ class StoreManager
             return;
         }
 
-        // Check if we wanna log test calls
-        if (!$this->activityManager->getConfigValue('log_test_calls', 'bool')) {
-            if (!$this->securityUtils->isSecurityUser()
-                || !$this->securityUtils->hasRole(SecurityUser::ROLE_CONSULTANT)) {
-                $this->logger->debug('AuditTracking:exit-no-real-user');
-                return;
-            }
-        }
-
         $thread = '?????';
         if ($this->requestStack->getCurrentRequest() instanceof Request) {
             $thread = $this->requestStack->getCurrentRequest()->attributes->get('requestId', $thread);
