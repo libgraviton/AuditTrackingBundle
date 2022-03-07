@@ -47,7 +47,8 @@ services:
     graviton.audit.model.auditracking:
         class: Graviton\AuditTrackingBundle\Model\AuditTracking
         parent: graviton.rest.model
-        arguments: ['@graviton.rql.visitor.mongodb']
+        arguments:
+            - '@=service(''kernel'').locateResource(''@GravitonAuditTrackingBundle/Resources/config/schema/AuditTracking.json'')'
         calls:
             - [setRepository, ['@graviton.audit.repository.audittracking']]
 
