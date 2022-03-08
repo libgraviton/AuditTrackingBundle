@@ -1,0 +1,74 @@
+{
+  "id": "AuditTracking",
+  "title": "AuditTracking",
+  "description": "AuditTracking",
+  "service": {
+    "readOnly": false
+  },
+  "target": {
+    "indexes": [],
+    "relations": [],
+    "fields": [
+      {
+        "name": "id",
+        "type": "varchar",
+        "title": "ID",
+        "description": "Unique identifier."
+      },
+      {
+        "name": "thread",
+        "type": "varchar",
+        "title": "Unique id per request",
+        "description": "Unique id per request"
+      },
+      {
+        "name": "username",
+        "type": "varchar",
+        "title": "User id per request",
+        "description": "User id per request"
+      },
+      {
+        "name": "action",
+        "type": "varchar",
+        "title": "Action executed",
+        "description": "Action done"
+      },
+      {
+        "name": "type",
+        "type": "varchar",
+        "title": "Type of action",
+        "description": "Type of action"
+      },
+      {
+        "name": "location",
+        "type": "varchar",
+        "title": "What was done, collection or request uri",
+        "description": "location of action"
+      },
+      {
+        "name": "data",
+        "type": "object",
+        "title": "parameters sent or received",
+        "description": "object data of action"
+      },
+      {
+        "name": "collectionId",
+        "type": "varchar",
+        "title": "Collection modified",
+        "description": "String name of collection that was modified"
+      },
+      {
+        "name": "collectionName",
+        "type": "varchar",
+        "title": "Collection ID modified",
+        "description": "String ID of collection modified"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "title": "Created At",
+        "description": "Timestamp of when record was saved"
+      }
+    ]
+  }
+}
