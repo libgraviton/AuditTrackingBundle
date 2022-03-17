@@ -5,7 +5,7 @@
 
 namespace Graviton\AuditTrackingBundle\Manager;
 
-use Graviton\AuditTrackingBundle\Document\AuditTracking;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 use Graviton\RestBundle\Event\ModelEvent;
 use Guzzle\Http\Message\Header;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -39,8 +39,8 @@ class ActivityManager
     /** @var array */
     private $configurations;
 
-    /** @var AuditTracking */
-    private $document;
+    /** @var string */
+    private $documentName;
 
     /** @var array Events that shall be stored */
     private $events = [];
@@ -52,15 +52,15 @@ class ActivityManager
      * DBActivityListener constructor.
      *
      * @param RequestStack  $requestStack Sf request data
-     * @param AuditTracking $document     DocumentCollection for event
+     * @param DocumentRepository $documentRepository repo
      */
     public function __construct(
         RequestStack  $requestStack,
-        AuditTracking $document
+        DocumentRepository $documentRepository
     ) {
         $this->requestStack = $requestStack;
         $this->request = $requestStack ? $requestStack->getCurrentRequest() : false;
-        $this->document = $document;
+        $this->documentName = $documentRepository->getClassName();
     }
 
     /**
@@ -163,7 +163,7 @@ class ActivityManager
         }
 
         /** @var AuditTracking $event */
-        $event = new $this->document();
+        $event = new $this->documentName();
         $event->setAction('request');
         $event->setType($method);
         $event->setData((object) $data);
@@ -205,7 +205,7 @@ class ActivityManager
         $request = $this->requestStack->getCurrentRequest();
 
         /** @var AuditTracking $audit */
-        $audit = new $this->document();
+        $audit = new $this->documentName();
         $audit->setAction('response');
         $audit->setType($statusCode);
         $audit->setData((object) $data);
@@ -234,7 +234,7 @@ class ActivityManager
         ];
 
         /** @var AuditTracking $audit */
-        $audit = new $this->document();
+        $audit = new $this->documentName();
         $audit->setAction('exception');
         $audit->setType($exception->getCode());
         $audit->setData($data);
@@ -268,7 +268,7 @@ class ActivityManager
         ];
 
         /** @var AuditTracking $audit */
-        $audit = new $this->document();
+        $audit = new $this->documentName();
         $audit->setAction($event->getAction());
         $audit->setType('collection');
         $audit->setData($data);

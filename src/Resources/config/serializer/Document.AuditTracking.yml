@@ -1,8 +1,0 @@
-Graviton\AuditTrackingBundle\Document\AuditTracking:
-    exclusion_policy: NONE
-    read_only: true
-    properties:
-        data:
-            expose: true
-            accessor:
-                getter: getData
